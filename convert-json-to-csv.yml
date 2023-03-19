@@ -1,0 +1,44 @@
+name: Convert JSON to CSV using YML
+
+description: |
+  This GitHub Action converts a JSON file to a CSV file using YML.
+
+inputs:
+  json-file:
+    description: 'The path to the input JSON file.'
+    required: true
+  csv-file:
+    description: 'The path to the output CSV file.'
+    required: true
+
+outputs:
+  csv-file:
+    description: 'The path to the output CSV file.'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y python3-pip
+        pip3 install --user agate
+
+    - name: Convert JSON to CSV
+      run: |
+        python3 convert.py ${{ inputs.json-file }} ${{ inputs.csv-file }}
+
+    - name: Upload CSV file as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: csv-file
+        path: ${{ inputs.csv-file }}
+
+    - name: Set output parameter
+      id: set_output
+      run: |
+        echo "::set-output name=csv-file::${{ inputs.csv-file }}"
