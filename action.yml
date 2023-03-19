@@ -1,0 +1,5 @@
+- name: Convert JSON to CSV
+  uses: doapply/convert-json-to-csv@v1.0.0
+  with:
+    json-file: 'path/to/input.json'
+    csv-file: 'path/to/output.csv'
